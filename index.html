@@ -2,71 +2,66 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vetrex Scripts</title>
 
 <style>
+/* ===== RESET ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ===== BASE ===== */
 html, body {
   width: 100%;
   height: 100%;
   background: #000;
-  overflow: hidden;
   font-family: Arial, sans-serif;
   color: #fff;
+  overflow: hidden;
 }
 
-/* Только мобильные */
-@media (min-width: 768px) {
-  body::before {
-    content: "Сайт доступен только на мобильных устройствах";
-    position: fixed;
-    inset: 0;
-    background: black;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-}
-
-/* Фон */
+/* ===== BACKGROUND ===== */
 canvas {
   position: fixed;
   inset: 0;
   z-index: 1;
 }
 
-/* Центр */
+/* ===== LAYOUT ===== */
 .container {
   position: relative;
   z-index: 2;
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.content {
+  width: 100%;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
+  gap: 20px;
 }
 
-/* Фото — без эффектов */
+/* ===== AVATAR ===== */
 .avatar {
-  width: 160px;
-  height: 160px;
+  width: clamp(120px, 30vw, 180px);
+  height: clamp(120px, 30vw, 180px);
   border-radius: 50%;
   object-fit: cover;
-  background: transparent;
 }
 
-/* Текст */
+/* ===== TITLE ===== */
 .title {
-  font-size: 26px;
+  font-size: clamp(22px, 4vw, 28px);
+  text-align: center;
   text-shadow:
     0 0 6px #00e5ff,
     0 0 16px #00e5ff,
@@ -74,10 +69,9 @@ canvas {
   animation: glow 2.5s ease-in-out infinite alternate;
 }
 
-/* Кнопки */
+/* ===== BUTTONS ===== */
 .buttons {
-  width: 85%;
-  max-width: 320px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -86,15 +80,15 @@ canvas {
 .btn {
   position: relative;
   padding: 14px;
-  text-align: center;
   border-radius: 18px;
+  text-align: center;
   text-decoration: none;
-  color: white;
-  font-size: 18px;
+  font-size: clamp(16px, 3.5vw, 18px);
+  color: #fff;
   background: transparent;
   opacity: 0;
-  transform: translateY(25px);
-  animation: fadeUp 1s forwards;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s forwards;
 }
 
 .btn::before {
@@ -125,11 +119,26 @@ canvas {
   transform: scale(0.95);
 }
 
-.btn:nth-child(1){animation-delay:0.3s}
-.btn:nth-child(2){animation-delay:0.6s}
-.btn:nth-child(3){animation-delay:0.9s}
+/* delays */
+.btn:nth-child(1){animation-delay:0.2s}
+.btn:nth-child(2){animation-delay:0.4s}
+.btn:nth-child(3){animation-delay:0.6s}
 
-/* Анимации */
+/* ===== TABLET ===== */
+@media (min-width: 768px) {
+  .content {
+    max-width: 480px;
+  }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 1024px) {
+  .content {
+    max-width: 520px;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
 @keyframes neon {
   0% {background-position:0% 50%}
   50% {background-position:100% 50%}
@@ -155,18 +164,19 @@ canvas {
 <canvas id="matrix"></canvas>
 
 <div class="container">
+  <div class="content">
 
-  <!-- ФОТО -->
-  <img src="123456.png" alt="avatar" class="avatar">
+    <img src="123456.png" alt="avatar" class="avatar">
 
-  <div class="title">vetrex scripts</div>
+    <div class="title">vetrex scripts</div>
 
-  <div class="buttons">
-    <a class="btn" href="https://discord.gg/R3cggfDytU" target="_blank"><span>Discord</span></a>
-    <a class="btn" href="https://www.tiktok.com/@vetrex1337.dev?_r=1&_t=ZS-92Wa8W9wwYZ" target="_blank"><span>Tik Tok</span></a>
-    <a class="btn" href="https://www.youtube.com/@Vetrex_scripts" target="_blank"><span>YouTube</span></a>
+    <div class="buttons">
+      <a class="btn" href="https://discord.gg/R3cggfDytU" target="_blank"><span>Discord</span></a>
+      <a class="btn" href="https://www.tiktok.com/@vetrex1337.dev?_r=1&_t=ZS-92Wa8W9wwYZ" target="_blank"><span>Tik Tok</span></a>
+      <a class="btn" href="https://www.youtube.com/@Vetrex_scripts" target="_blank"><span>YouTube</span></a>
+    </div>
+
   </div>
-
 </div>
 
 <script>
@@ -182,8 +192,14 @@ addEventListener("resize", resize);
 
 const symbols = ["1","0","\"","*","/","+","%"];
 const size = 14;
-let cols = Math.floor(innerWidth / size);
-let drops = Array(cols).fill(0);
+let drops = [];
+
+function init(){
+  const cols = Math.floor(innerWidth / size);
+  drops = Array(cols).fill(0);
+}
+init();
+addEventListener("resize", init);
 
 function draw(){
   ctx.fillStyle = "rgba(0,0,0,0.15)";
@@ -195,6 +211,7 @@ function draw(){
     const c = Math.random();
     ctx.fillStyle = c<0.33 ? "#fff" : c<0.66 ? "#8e2de2" : "#00e5ff";
     ctx.fillText(char, i*size, drops[i]*size);
+
     if(drops[i]*size > canvas.height && Math.random()>0.97) drops[i]=0;
     drops[i]++;
   }
