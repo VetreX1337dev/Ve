@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -15,10 +15,10 @@
 html, body {
   width: 100%;
   height: 100%;
-  background: black;
+  background: #000;
   overflow: hidden;
   font-family: Arial, sans-serif;
-  color: white;
+  color: #fff;
 }
 
 /* Только мобильные */
@@ -43,7 +43,7 @@ canvas {
   z-index: 1;
 }
 
-/* Центр */
+/* Контент */
 .container {
   position: relative;
   z-index: 2;
@@ -55,10 +55,33 @@ canvas {
   gap: 18px;
 }
 
-/* Фото — ТОЛЬКО ОБВОДКА */
-.avatar-border {
+/* ===== ФОТО С РАЗМЫТЫМ НЕОНОМ ===== */
+.avatar-wrap {
+  position: relative;
   width: 160px;
   height: 160px;
+}
+
+/* Размытое свечение */
+.avatar-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: linear-gradient(270deg, #00e5ff, #2979ff, #00e5ff);
+  background-size: 400% 400%;
+  animation: neon 6s linear infinite;
+  filter: blur(25px);
+  opacity: 0.9;
+  z-index: 0;
+}
+
+/* Чёткая обводка */
+.avatar-border {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   padding: 4px;
   background: linear-gradient(270deg, #00e5ff, #2979ff, #00e5ff);
@@ -78,9 +101,9 @@ canvas {
 .title {
   font-size: 26px;
   text-shadow:
-    0 0 5px #00e5ff,
-    0 0 15px #00e5ff,
-    0 0 30px #2979ff;
+    0 0 6px #00e5ff,
+    0 0 16px #00e5ff,
+    0 0 32px #2979ff;
   animation: glow 2.5s ease-in-out infinite alternate;
 }
 
@@ -101,7 +124,7 @@ canvas {
   text-decoration: none;
   color: white;
   font-size: 18px;
-  background: transparent; /* НЕТ ФОНА */
+  background: transparent;
   opacity: 0;
   transform: translateY(25px);
   animation: fadeUp 1s forwards;
@@ -165,8 +188,11 @@ canvas {
 <canvas id="matrix"></canvas>
 
 <div class="container">
-  <div class="avatar-border">
-    <img src="123456.jpe" alt="avatar">
+
+  <div class="avatar-wrap">
+    <div class="avatar-border">
+      <img src="123456.jpe" alt="avatar">
+    </div>
   </div>
 
   <div class="title">vetrex scripts</div>
@@ -176,6 +202,7 @@ canvas {
     <a class="btn" href="https://www.tiktok.com/@vetrex1337.dev?_r=1&_t=ZS-92Wa8W9wwYZ" target="_blank"><span>Tik Tok</span></a>
     <a class="btn" href="https://www.youtube.com/@Vetrex_scripts" target="_blank"><span>YouTube</span></a>
   </div>
+
 </div>
 
 <script>
@@ -197,7 +224,6 @@ let drops = Array(cols).fill(0);
 function draw(){
   ctx.fillStyle = "rgba(0,0,0,0.15)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
-
   ctx.font = size + "px monospace";
 
   for(let i=0;i<drops.length;i++){
@@ -205,7 +231,6 @@ function draw(){
     const c = Math.random();
     ctx.fillStyle = c<0.33 ? "#fff" : c<0.66 ? "#8e2de2" : "#00e5ff";
     ctx.fillText(char, i*size, drops[i]*size);
-
     if(drops[i]*size > canvas.height && Math.random()>0.97) drops[i]=0;
     drops[i]++;
   }
@@ -215,4 +240,3 @@ setInterval(draw,50);
 
 </body>
 </html>
-
