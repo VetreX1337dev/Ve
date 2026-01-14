@@ -6,155 +6,166 @@
 <title>Vetrex Scripts</title>
 
 <style>
-/* ===== RESET ===== */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ===== BASE ===== */
-html, body {
-  width: 100%;
-  height: 100%;
-  background: #000;
-  font-family: Arial, sans-serif;
-  color: #fff;
-  overflow: hidden;
+body {
+    background: black;
+    overflow: hidden;
+    height: 100vh;
 }
 
-/* ===== BACKGROUND ===== */
+/* === MATRIX BACKGROUND === */
 canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
 }
 
-/* ===== LAYOUT ===== */
+/* === CENTER === */
 .container {
-  position: relative;
-  z-index: 2;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px; /* минимальное расстояние между кнопками */
+    padding: 20px;
 }
 
-.content {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+/* === TOP CIRCULAR IMAGE (просто фото, без эффектов) === */
+.top-image {
+    width: clamp(80px, 12vw, 150px);
+    height: clamp(80px, 12vw, 150px);
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* ===== AVATAR ===== */
-.avatar {
-  width: clamp(120px, 30vw, 180px);
-  height: clamp(120px, 30vw, 180px);
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* ===== TITLE ===== */
+/* === TITLE === */
 .title {
-  font-size: clamp(22px, 4vw, 28px);
-  text-align: center;
-  text-shadow:
-    0 0 6px #00e5ff,
-    0 0 16px #00e5ff,
-    0 0 32px #2979ff;
-  animation: glow 2.5s ease-in-out infinite alternate;
+    font-size: clamp(34px, 6vw, 64px);
+    color: white;
+    letter-spacing: 4px;
+    text-transform: lowercase;
+    animation: glowText 6s ease-in-out infinite;
 }
 
-/* ===== BUTTONS ===== */
-.buttons {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+@keyframes glowText {
+    0%,100% {
+        text-shadow: 0 0 15px #00cfff, 0 0 30px #00cfff;
+    }
+    50% {
+        text-shadow: 0 0 25px #00cfff, 0 0 50px #7a00ff;
+    }
 }
 
+/* === BUTTONS === */
 .btn {
-  position: relative;
-  padding: 14px;
-  border-radius: 18px;
-  text-align: center;
-  text-decoration: none;
-  font-size: clamp(16px, 3.5vw, 18px);
-  color: #fff;
-  background: transparent;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.8s forwards;
+    width: min(280px, 90vw);
+    padding: 12px 14px;
+    text-align: center;
+    border-radius: 14px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 
 .btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  padding: 2px;
-  background: linear-gradient(270deg, #00e5ff, #8e2de2, #00e5ff);
-  background-size: 400% 400%;
-  animation: neon 5s linear infinite;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(120deg, #00cfff, #7a00ff, #00cfff);
+    background-size: 300%;
+    animation: borderMove 6s linear infinite;
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
 }
 
-.btn span {
-  position: relative;
-  z-index: 1;
-  text-shadow:
-    0 0 6px #00e5ff,
-    0 0 12px #8e2de2;
+@keyframes borderMove {
+    0% {background-position: 0%}
+    100% {background-position: 300%}
+}
+
+.btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 30px rgba(0,200,255,0.35);
 }
 
 .btn:active {
-  transform: scale(0.95);
+    transform: scale(0.97);
 }
 
-/* delays */
-.btn:nth-child(1){animation-delay:0.2s}
-.btn:nth-child(2){animation-delay:0.4s}
-.btn:nth-child(3){animation-delay:0.6s}
-
-/* ===== TABLET ===== */
-@media (min-width: 768px) {
-  .content {
-    max-width: 480px;
-  }
+/* === SUB BUTTONS === */
+.sub-buttons {
+    display: flex;
+    gap: 4px; /* минимальное расстояние между sub-кнопками */
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 1s ease, opacity 1s ease;
 }
 
-/* ===== DESKTOP ===== */
-@media (min-width: 1024px) {
-  .content {
-    max-width: 520px;
-  }
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes neon {
-  0% {background-position:0% 50%}
-  50% {background-position:100% 50%}
-  100% {background-position:0% 50%}
-}
-
-@keyframes glow {
-  from {opacity:0.8}
-  to {opacity:1}
-}
-
-@keyframes fadeUp {
-  to {
+.sub-buttons.show {
+    max-height: 120px;
     opacity: 1;
-    transform: translateY(0);
-  }
+}
+
+.sub-btn {
+    width: 120px;
+    padding: 12px;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+.sub-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(120deg, #00cfff, #7a00ff);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+}
+
+.sub-btn:hover {
+    transform: scale(1.05);
+}
+
+/* === COMING SOON === */
+.coming {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 1.2s ease, opacity 1.2s ease;
+    font-size: 18px;
+    color: white;
+    text-shadow: 0 0 15px #00cfff;
+}
+
+.coming.show {
+    max-height: 60px;
+    opacity: 1;
 }
 </style>
 </head>
@@ -164,61 +175,71 @@ canvas {
 <canvas id="matrix"></canvas>
 
 <div class="container">
-  <div class="content">
-
-    <img src="123456.png" alt="avatar" class="avatar">
+    <!-- CIRCULAR IMAGE -->
+    <img src="1234567890.png" alt="Logo" class="top-image">
 
     <div class="title">vetrex scripts</div>
 
-    <div class="buttons">
-      <a class="btn" href="https://discord.gg/R3cggfDytU" target="_blank"><span>Discord</span></a>
-      <a class="btn" href="https://www.tiktok.com/@vetrex1337.dev?_r=1&_t=ZS-92Wa8W9wwYZ" target="_blank"><span>Tik Tok</span></a>
-      <a class="btn" href="https://www.youtube.com/@Vetrex_scripts" target="_blank"><span>YouTube</span></a>
+    <div class="btn" onclick="go('https://discord.gg/Gx5F6pZCw5')">Discord</div>
+    <div class="btn" onclick="go('https://www.tiktok.com/@vetrex1337.dev?_r=1&_t=ZS-92Wa8W9wwYZ')">Tik Tok</div>
+
+    <div class="btn" onclick="toggleDownload()">Download delta</div>
+    <div class="sub-buttons" id="download">
+        <div class="sub-btn" onclick="go('https://deltaexploits.gg/delta-executor-android')">android</div>
+        <div class="sub-btn" onclick="go('https://deltaexploits.gg/delta-executor-ios')">ios</div>
     </div>
 
-  </div>
+    <div class="btn" onclick="toggleComing()">Delta bypass</div>
+    <div class="coming" id="coming">coming soon</div>
+
+    <div class="btn" onclick="go('https://github.com/x2Swiftz/UI-Library/blob/main/README.md')">UI library</div>
 </div>
 
 <script>
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
+function go(url) {
+    window.open(url, "_blank");
+}
 
-function resize(){
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
+function toggleDownload() {
+    document.getElementById('download').classList.toggle('show');
+}
+
+function toggleComing() {
+    document.getElementById('coming').classList.toggle('show');
+}
+
+/* === MATRIX EFFECT === */
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 resize();
-addEventListener("resize", resize);
+window.addEventListener('resize', resize);
 
-const symbols = ["1","0","\"","*","/","+","%"];
-const size = 14;
-let drops = [];
+const chars = ['0','1'];
+const colors = ['#ffffff','#00cfff','#7a00ff'];
+const drops = Array(Math.floor(canvas.width / 18)).fill(1);
 
-function init(){
-  const cols = Math.floor(innerWidth / size);
-  drops = Array(cols).fill(0);
+function draw() {
+    ctx.fillStyle = 'rgba(0,0,0,0.08)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    drops.forEach((y,i)=>{
+        const text = chars[Math.floor(Math.random()*2)];
+        ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)];
+        ctx.font = '14px monospace';
+        ctx.fillText(text, i*18, y*18);
+
+        if (y*18 > canvas.height && Math.random() > 0.985)
+            drops[i] = 0;
+        drops[i]++;
+    });
 }
-init();
-addEventListener("resize", init);
-
-function draw(){
-  ctx.fillStyle = "rgba(0,0,0,0.15)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.font = size + "px monospace";
-
-  for(let i=0;i<drops.length;i++){
-    const char = symbols[Math.random()*symbols.length|0];
-    const c = Math.random();
-    ctx.fillStyle = c<0.33 ? "#fff" : c<0.66 ? "#8e2de2" : "#00e5ff";
-    ctx.fillText(char, i*size, drops[i]*size);
-
-    if(drops[i]*size > canvas.height && Math.random()>0.97) drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(draw,50);
+setInterval(draw, 50);
 </script>
 
 </body>
 </html>
-
